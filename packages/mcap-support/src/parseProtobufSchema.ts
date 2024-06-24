@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import protobufjs from "protobufjs";
-import * as protobuf from 'protobufjs';
 
 import { FileDescriptorSet } from "protobufjs/ext/descriptor";
 
@@ -93,7 +92,7 @@ export function parseProtobufSchema(
 
 
 function populateNestedDefaults(
-    typeDescriptor: protobuf.Type,
+    typeDescriptor: protobufjs.Type,
     message: any,
     parent_name: string,
     visitedTypes: Set<string>
@@ -117,7 +116,7 @@ function populateNestedDefaults(
             const fieldDescriptor = typeDescriptor.fields[setMember];
             if (fieldDescriptor) {
                 const fieldType = fieldDescriptor.resolve().resolvedType;
-                if (fieldType instanceof protobuf.Type) {
+                if (fieldType instanceof protobufjs.Type) {
                     message[setMember] = populateNestedDefaults(fieldType, message[setMember], `${parent_name}.${setMember}`, visitedTypes);
                 }
             }
@@ -128,7 +127,7 @@ function populateNestedDefaults(
                 const fieldDescriptor = typeDescriptor.fields[firstMember];
                 if (fieldDescriptor) {
                     const fieldType = fieldDescriptor.resolve().resolvedType;
-                    if (fieldType instanceof protobuf.Type) {
+                    if (fieldType instanceof protobufjs.Type) {
                         message[firstMember] = populateNestedDefaults(fieldType, {}, `${parent_name}.${firstMember}`, visitedTypes);
                 }
             }
@@ -142,7 +141,7 @@ function populateNestedDefaults(
         const fieldType = field.resolve().resolvedType;
 
 
-        if (fieldType instanceof protobuf.Type) {
+        if (fieldType instanceof protobufjs.Type) {
             // Field is a message type, recursively populate its defaults
             message[field.name] = populateNestedDefaults(fieldType, message?.[field.name]? message[field.name]: fieldType.create({}), `${parent_name}.${field.name}`, visitedTypes);
         } else {
